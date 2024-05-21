@@ -1,7 +1,7 @@
 import json
 from web3 import Web3
-from abi_amo import amo_abi
-from abi_amo_threepool import abi_amo_threepool
+from .abi.abi_amo import amo_abi
+from .abi.abi_amo_threepool import abi_amo_threepool
 
 # Fill in your infura API key here
 mainnet_API_key = "https://mainnet.infura.io/v3/245a04220b7442de94d1a26862bbbfa6"

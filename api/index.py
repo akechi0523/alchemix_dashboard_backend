@@ -1,6 +1,6 @@
 import json
 from flask import Flask
-from main_script import fetch_data
+from .template.main_script import fetch_data
 from flask_cors import CORS
 from flask_cors import cross_origin
 

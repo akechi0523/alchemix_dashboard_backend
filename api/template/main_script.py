@@ -1,11 +1,10 @@
 import json
-from flask import jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
-from yield_script import fetch_yieldToken
-from whitelist_script import fetch_whitelist
-from transmuter_script import fetch_transmuter
-from amo_script import fetch_AMO
-from alchemist_script import fetch_alchemist
+from .functions.yield_script import fetch_yieldToken
+from .functions.whitelist_script import fetch_whitelist
+from .functions.transmuter_script import fetch_transmuter
+from .functions.amo_script import fetch_AMO
+from .functions.alchemist_script import fetch_alchemist
 
 def fetch_data():
     data = {
