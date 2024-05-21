@@ -1,4 +1,4 @@
-# import json
+import json
 from flask import Flask
 from main_script import fetch_data
 from flask_cors import CORS
@@ -8,13 +8,12 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 data = fetch_data()
 
-@app.route('/data')
+@app.route('/api/data')
 @cross_origin()
 def get_json_data():
-    # data1 = json.dumps(data, sort_keys=False)
-    data1 = {'messsge':"Hello"}
+    data1 = json.dumps(data, sort_keys=False)
     return data1
 
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
 
