@@ -15,7 +15,7 @@ def fetch_data():
         'amo':fetch_AMO(),
         'transmuter':fetch_transmuter()
     }
-    with open('data1.json', 'w') as json_file:
+    with open('data.json', 'w') as json_file:
         json.dump(data, json_file)
     return data
 
