@@ -14,6 +14,6 @@ def get_json_data():
     data1 = json.dumps(data, sort_keys=False)
     return data1
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
 
