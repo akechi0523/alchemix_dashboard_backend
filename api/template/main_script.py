@@ -1,5 +1,4 @@
 import json
-from apscheduler.schedulers.background import BackgroundScheduler
 from .functions.yield_script import fetch_yieldToken
 from .functions.whitelist_script import fetch_whitelist
 from .functions.transmuter_script import fetch_transmuter
@@ -17,7 +16,3 @@ def fetch_data():
     with open('data.json', 'w') as json_file:
         json.dump(data, json_file)
     return data
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(fetch_data, 'interval', hours=12)
-scheduler.start()
