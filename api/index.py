@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_cors import cross_origin
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "https://alchemix-dashboard-frontend.vercel.app/"}})
 # data = fetch_data()
 
 @app.route('/api/data')
