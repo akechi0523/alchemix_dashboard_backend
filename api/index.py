@@ -40,10 +40,8 @@ def get_json_data():
     return data1
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(fetch_data, 'interval', hours=12)
+scheduler.add_job(fetch_data, 'interval', hours=1)
 scheduler.start()
-
-
 
 if __name__ == '__main__':
     app.run()
