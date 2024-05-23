@@ -12,10 +12,21 @@ web3_mainnet = Web3(Web3.HTTPProvider(mainnet_API_key))
 web3_arbitrum = Web3(Web3.HTTPProvider(arbitrum_API_key))
 web3_optimism = Web3(Web3.HTTPProvider(optimism_API_key))
 
-#Alchemist addresses
-mainnet = ['0x5C6374a2ac4EBC38DeA0Fc1F8716e5Ea1AdD94dd', '0x062Bf725dC4cDF947aa79Ca2aaCCD4F385b13b5c']
-arbitrum = ['0xb46eE2E4165F629b4aBCE04B7Eb4237f951AC66F', '0x654e16a0b161b150F5d1C8a5ba6E7A7B7760703A']
-optimism = ['0x10294d57A419C8eb78C648372c5bAA27fD1484af', '0xe04Bb5B4de60FA2fBa69a93adE13A8B3B569d5B4']
+
+
+mainnet = {
+    'alUSD':'0x5C6374a2ac4EBC38DeA0Fc1F8716e5Ea1AdD94dd',
+    'alETH':'0x062Bf725dC4cDF947aa79Ca2aaCCD4F385b13b5c'
+}
+optimism = {
+    'alUSD':'0x10294d57A419C8eb78C648372c5bAA27fD1484af',
+    'alETH':'0xe04Bb5B4de60FA2fBa69a93adE13A8B3B569d5B4',
+}
+arbitrum = {
+    'alUSD':'0xb46eE2E4165F629b4aBCE04B7Eb4237f951AC66F',
+    'alETH':'0x654e16a0b161b150F5d1C8a5ba6E7A7B7760703A',
+}
+
 
 #Function to get alchemist parameters
 def getAlchemist(alchemist, web3):
@@ -27,11 +38,13 @@ def getAlchemist(alchemist, web3):
         chainName = "Arbitrum"
     if alchemist==optimism:
         chainName = "Optimism"
-    for address in alchemist:
+    for key in alchemist.keys():
+        address = alchemist[key]
         contract = web3.eth.contract(address=address, abi=alchemistv2_abi)
         debtTokenAddress = contract.functions.debtToken().call()
         underlyingTokenAddress = contract.functions.getSupportedUnderlyingTokens().call()
         alchemistParas[address] = {
+            'alchemist':key,
             'chain':chainName,
             'admin':contract.functions.admin().call(),
             'debtToken':getDebtToken(debtTokenAddress, web3),
@@ -70,56 +83,11 @@ def getUnderlyingToken(underlyingTokenAddress, web3, alchemist):
         }
     return underlyingToken
 
-# # Function to recursively convert non-string values to strings
-# def convert_non_string_to_string(data):
-#     for key, value in data.items():
-#         if isinstance(value, dict):
-#             convert_non_string_to_string(value)
-#         elif isinstance(value, list):
-#             data[key] = [str(item) for item in value]
-#         elif not isinstance(value, str):
-#             data[key] = str(value)
-#     return data
-# Function to recursively convert non-string values to strings
-def convert_non_string_to_string(data):
-    for key, value in data.items():
-        if isinstance(value, list):
-            data[key] = [str(item) if not isinstance(item, str) else item for item in value]
-        elif isinstance(value, dict):
-            convert_non_string_to_string(value)
-        elif not isinstance(value, str):
-            data[key] = str(value)
-    
-    # Special handling for "getUnderlyingTokenParameters"
-    if "getUnderlyingTokenParameters" in data:
-        params = data["getUnderlyingTokenParameters"]
-        if isinstance(params, str):
-            # Convert string representation to list of strings
-            params = params.strip('()').split(', ')
-            params = [x.lower() if x.strip().lower() == 'true' or x.strip().lower() == 'false' else x for x in params]
-            data["getUnderlyingTokenParameters"] = [str(param) for param in params]
-
-    return data
-
 def fetch_alchemist():
     transmuter = {
-        'mainnet':convert_non_string_to_string(getAlchemist(mainnet, web3_mainnet)),
-        'arbitrum':convert_non_string_to_string(getAlchemist(arbitrum, web3_arbitrum)),
-        'optimism':convert_non_string_to_string(getAlchemist(optimism, web3_optimism))
+        'mainnet':getAlchemist(mainnet, web3_mainnet),
+        'arbitrum':getAlchemist(arbitrum, web3_arbitrum),
+        'optimism':getAlchemist(optimism, web3_optimism)
     }
     return transmuter
-
-# print(">>>>>>>>>>>>>Mainnet<<<<<<<<<<<<<<<<")
-# print(getAlchemist(mainnet, web3_mainnet))
-# print(">>>>>>>>>>>>>Arbitrum<<<<<<<<<<<<<<<<")
-# print(getAlchemist(arbitrum, web3_arbitrum))
-# print(">>>>>>>>>>>>>Optimism<<<<<<<<<<<<<<<<")
-# print(getAlchemist(optimism, web3_optimism))
-
-# with open('alchemist_mainnet.json', 'w') as json_file:
-#     json.dump(convert_non_string_to_string(getAlchemist(mainnet, web3_mainnet)), json_file)
-# with open('alchemist_arbitrum.json', 'w') as json_file:
-#     json.dump(getAlchemist(arbitrum, web3_arbitrum), json_file)
-# with open('alchemist_optimism.json', 'w') as json_file:
-#     json.dump(getAlchemist(optimism, web3_optimism), json_file)
 

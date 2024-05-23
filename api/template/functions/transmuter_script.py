@@ -37,12 +37,21 @@ arbitrum = {
 #Function to get transmuter
 def getTransmuter(transmuterAddress, web3):
     transmuter = {}
-    for address in transmuterAddress.values():
+    if transmuterAddress==mainnet:
+        chainName = "Mainnet"
+    if transmuterAddress==arbitrum:
+        chainName = "Arbitrum"
+    if transmuterAddress==optimism:
+        chainName = "Optimism"
+    for key in transmuterAddress.keys():
+        address = transmuterAddress[key]
         contract = web3.eth.contract(address=address, abi=transmuter_abi)
         syntheticTokenAddress = contract.functions.syntheticToken().call()
         bufferAddress = contract.functions.buffer().call()
         # print(admin)
         transmuter[address] = {
+            'chain':chainName,
+            'transmuter':key,
             'transmuterAddress':address,
             'ADMIN':'0xdf8b4c520ffe197c5343c6f5aec59570151ef9a492f2c624fd45ddde6135ec42',
             'buffer':getBuffer(bufferAddress, web3),
@@ -114,40 +123,11 @@ def getUnderlyingToken(bufferAddress, underlyingTokenAddress, web3):
         }
     return underlyingToken
 
-#Function to convert values to string
-def convert_values_to_string(data):
-    for key, value in data.items():
-        if isinstance(value, dict):
-            convert_values_to_string(value)
-        elif isinstance(value, list):
-            for i in range(len(value)):
-                if isinstance(value[i], (int, float, bool)):
-                    value[i] = str(value[i])
-        elif not isinstance(value, str):
-            data[key] = str(value)
-    
-    return data
-
 def fetch_transmuter():
     transmuter = {
-        'mainnet':convert_values_to_string(getTransmuter(mainnet, web3_mainnet)),
-        'arbitrum':convert_values_to_string(getTransmuter(arbitrum, web3_arbitrum)),
-        'optimism':convert_values_to_string(getTransmuter(optimism, web3_optimism))
+        'mainnet':getTransmuter(mainnet, web3_mainnet),
+        'arbitrum':getTransmuter(arbitrum, web3_arbitrum),
+        'optimism':getTransmuter(optimism, web3_optimism)
     }
     return transmuter
-
-# print(">>>>>>>>>>>>>Mainnet<<<<<<<<<<<<<<<<")
-# print(getTransmuter(mainnet, web3_mainnet))
-# print(">>>>>>>>>>>>>Arbitrum<<<<<<<<<<<<<<<<")
-# print(getTransmuter(arbitrum, web3_arbitrum))
-# print(">>>>>>>>>>>>>Optimism<<<<<<<<<<<<<<<<")
-# print(getTransmuter(optimism, web3_optimism))
-
-# with open('transmuter_mainnet.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getTransmuter(mainnet, web3_mainnet)), json_file)
-# with open('transmuter_arbitrum.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getTransmuter(arbitrum, web3_arbitrum)), json_file)
-# with open('transmuter_optimism.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getTransmuter(optimism, web3_optimism)), json_file)
-
 

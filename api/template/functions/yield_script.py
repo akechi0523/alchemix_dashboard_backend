@@ -13,22 +13,39 @@ web3_arbitrum = Web3(Web3.HTTPProvider(arbitrum_API_key))
 web3_optimism = Web3(Web3.HTTPProvider(optimism_API_key))
 
 #Alchemist addresses
-mainnet = ['0x5C6374a2ac4EBC38DeA0Fc1F8716e5Ea1AdD94dd', '0x062Bf725dC4cDF947aa79Ca2aaCCD4F385b13b5c']
-arbitrum = ['0xb46eE2E4165F629b4aBCE04B7Eb4237f951AC66F', '0x654e16a0b161b150F5d1C8a5ba6E7A7B7760703A']
-optimism = ['0x10294d57A419C8eb78C648372c5bAA27fD1484af', '0xe04Bb5B4de60FA2fBa69a93adE13A8B3B569d5B4']
+mainnet = {
+    'alUSD':'0x5C6374a2ac4EBC38DeA0Fc1F8716e5Ea1AdD94dd',
+    'alETH':'0x062Bf725dC4cDF947aa79Ca2aaCCD4F385b13b5c'
+}
+optimism = {
+    'alUSD':'0x10294d57A419C8eb78C648372c5bAA27fD1484af',
+    'alETH':'0xe04Bb5B4de60FA2fBa69a93adE13A8B3B569d5B4',
+}
+arbitrum = {
+    'alUSD':'0xb46eE2E4165F629b4aBCE04B7Eb4237f951AC66F',
+    'alETH':'0x654e16a0b161b150F5d1C8a5ba6E7A7B7760703A',
+}
 
 #Function to get yield token
 def getYieldToken(alchemist, web3):
     yieldToken = {}
     yieldTokenAddress = []
     yieldTokenParas = []
-    for address in alchemist:
+    if alchemist==mainnet:
+        chainName = "Mainnet"
+    if alchemist==arbitrum:
+        chainName = "Arbitrum"
+    if alchemist==optimism:
+        chainName = "Optimism"
+    for key in alchemist.keys():
+        address = alchemist[key]
         contract = web3.eth.contract(address=address, abi=alchemistv2_abi)
         yieldTokenAddress = contract.functions.getSupportedYieldTokens().call()
         for i in yieldTokenAddress:
             yieldTokenParas = contract.functions.getYieldTokenParameters(i).call()
             yieldTokenName = getYieldTokenName(i, web3)
             yieldToken[i] = {
+                'chain':chainName,
                 'Name':yieldTokenName,
                 'Decimals':yieldTokenParas[0],
                 'underlyingToken': yieldTokenParas[1],
@@ -54,31 +71,10 @@ def getYieldTokenName(yieldTokenAddress, web3):
     yieldTokenName = contract.functions.name().call()
     return yieldTokenName
 
-#Function to convert values to string
-def convert_values_to_string(data):
-    for key, value in data.items():
-        for k, v in value.items():
-            if isinstance(v, (int, float, bool)):
-                data[key][k] = str(v)
-    return data
-
-# print(">>>>>>>>>>>>>Mainnet<<<<<<<<<<<<<<<<")
-# print(getYieldToken(mainnet, web3_mainnet))
-# print(">>>>>>>>>>>>>Arbitrum<<<<<<<<<<<<<<<<")
-# print(getYieldToken(arbitrum, web3_arbitrum))
-# print(">>>>>>>>>>>>>Optimism<<<<<<<<<<<<<<<<")
-# print(getYieldToken(optimism, web3_optimism))
 def fetch_yieldToken():
     yieldTokens = {
-        'mainnet':convert_values_to_string(getYieldToken(mainnet, web3_mainnet)),
-        'arbitrum':convert_values_to_string(getYieldToken(arbitrum, web3_arbitrum)),
-        'optimism':convert_values_to_string(getYieldToken(optimism, web3_optimism))
+        'mainnet':getYieldToken(mainnet, web3_mainnet),
+        'arbitrum':getYieldToken(arbitrum, web3_arbitrum),
+        'optimism':getYieldToken(optimism, web3_optimism)
     }
     return yieldTokens
-
-# with open('yield_mainnet.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getYieldToken(mainnet, web3_mainnet)), json_file)
-# with open('yield_arbitrum.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getYieldToken(arbitrum, web3_arbitrum)), json_file)
-# with open('yield_optimism.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getYieldToken(optimism, web3_optimism)), json_file)

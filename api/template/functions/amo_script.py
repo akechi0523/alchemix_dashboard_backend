@@ -42,18 +42,7 @@ def getAMO(AMOs, web3):
         }
     return AMO
 
-#Function to convert values to string
-def convert_values_to_string(data):
-    for key, value in data.items():
-        for k, v in value.items():
-            if isinstance(v, (int, float, bool)):
-                data[key][k] = str(v)
-    return data
-
 def fetch_AMO():
-    amo = convert_values_to_string(getAMO(AMOs, web3_mainnet))
+    amo = getAMO(AMOs, web3_mainnet)
     return amo
 
-# print(getAMO(AMOs, web3_mainnet))
-# with open('AMO.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getAMO(AMOs, web3_mainnet)), json_file)

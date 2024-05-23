@@ -1,6 +1,7 @@
 import json
 from web3 import Web3
 from .abi.abi_alchemistv2 import alchemistv2_abi
+from .abi.abi_common import common_abi
 from .abi.abi_whitelist import whitelist_abi
 
 # Fill in your infura API key here
@@ -48,14 +49,15 @@ def getWhitelist(alchemist, web3):
         chainName = "Arbitrum"
     if alchemist==optimism:
         chainName = "Optimism"
-    for address in alchemist.values():
-        contract = web3.eth.contract(address=address, abi=alchemistv2_abi)
+    for key in alchemist.keys():
+        contract = web3.eth.contract(address=alchemist[key], abi=alchemistv2_abi)
         whitelistAddress = contract.functions.whitelist().call()
         # print(whitelistAddress)
         whitelist[whitelistAddress] = {
+            'alchemist':key,
             'whitelistAddress':whitelistAddress,
             'chain':chainName,
-            'associatedAlchemist':address,
+            'associatedAlchemist':alchemist[key],
             'whitelisted':getWhitelisted(whitelistAddress, web3)
         }
     return whitelist
@@ -67,32 +69,11 @@ def getWhitelisted(whitelistAddress, web3):
     whitelisted = contract.functions.getAddresses().call()
     return whitelisted
 
-#Function to convert values to string
-def convert_values_to_string(data):
-    for key, value in data.items():
-        for k, v in value.items():
-            if isinstance(v, (int, float, bool)):
-                data[key][k] = str(v)
-    return data
-
 def fetch_whitelist():
     whitelist = {
-        'mainnet':convert_values_to_string(getWhitelist(mainnet, web3_mainnet)),
-        'arbitrum':convert_values_to_string(getWhitelist(arbitrum, web3_arbitrum)),
-        'optimism':convert_values_to_string(getWhitelist(optimism, web3_optimism))
+        'mainnet':getWhitelist(mainnet, web3_mainnet),
+        'arbitrum':getWhitelist(arbitrum, web3_arbitrum),
+        'optimism':getWhitelist(optimism, web3_optimism)
     }
     return whitelist
 
-# print(">>>>>>>>>>>>>Mainnet<<<<<<<<<<<<<<<<")
-# print(getWhitelist(mainnet, web3_mainnet))
-# print(">>>>>>>>>>>>>Arbitrum<<<<<<<<<<<<<<<<")
-# print(getWhitelist(arbitrum, web3_arbitrum))
-# print(">>>>>>>>>>>>>Optimism<<<<<<<<<<<<<<<<")
-# print(getWhitelist(optimism, web3_optimism))
-
-# with open('whitelist_mainnet.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getWhitelist(mainnet, web3_mainnet)), json_file)
-# with open('whitelist_arbitrum.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getWhitelist(arbitrum, web3_arbitrum)), json_file)
-# with open('whitelist_optimism.json', 'w') as json_file:
-#     json.dump(convert_values_to_string(getWhitelist(optimism, web3_optimism)), json_file)
