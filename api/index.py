@@ -1,7 +1,7 @@
 import json
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
-from.template.main_script import fetch_data
+from .template.main_script import fetch_data
 from flask_cors import CORS
 from flask_cors import cross_origin
 
