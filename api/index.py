@@ -1,7 +1,7 @@
 import json
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
-from .template.main_script import fetch_data
+from.template.main_script import fetch_data
 from flask_cors import CORS
 from flask_cors import cross_origin
 
@@ -17,9 +17,9 @@ def get_json_data():
     data1 = json.dumps(data, sort_keys=False)
     return data1
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(fetch_data, 'interval', hours=2)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(fetch_data, 'interval', hours=2)
+# scheduler.start()
 
 if __name__ == '__main__':
     app.run()
