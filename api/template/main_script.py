@@ -28,6 +28,25 @@ def convert_data(data):
 # Convert data in the JSON
 converted_data = convert_data(data)
 
+# Function to convert boolean values to strings
+def convert_booleans_to_strings(data):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            data[key] = convert_booleans_to_strings(value)
+    elif isinstance(data, list):
+        for i in range(len(data)):
+            if isinstance(data[i], bool):
+                data[i] = str(data[i])
+            elif isinstance(data[i], list):
+                data[i] = convert_booleans_to_strings(data[i])
+    elif isinstance(data, bool):
+        data = str(data)
+    return data
+
+
+# Convert boolean values in the JSON data to strings
+final_data = convert_booleans_to_strings(converted_data)
+
 def fetch_data():
     with open('data.json', 'w') as json_file:
-        json.dump(convert_data, json_file)
+        json.dump(final_data, json_file)

@@ -107,11 +107,29 @@ def getBuffer(bufferAddress, web3):
     return buffer
 
 #Function to get underlying token
+# def getUnderlyingToken(bufferAddress, underlyingTokenAddress, web3):
+#     underlyingToken = {}
+#     for address in underlyingTokenAddress:
+#         contract = web3.eth.contract(address=bufferAddress, abi=transmuterbuffer_abi)
+#         underlyingToken[address] = {
+#             'underlyingTokenAddress':address,
+#             'AMOs':contract.functions.amos(address).call(),
+#             'divertToAMO':contract.functions.divertToAmo(address).call(),
+#             'flowAvailable':contract.functions.flowAvailable(address).call(),
+#             'flowRate':contract.functions.flowRate(address).call(),
+#             'getAvailableFlow':contract.functions.getAvailableFlow(address).call(),
+#             'lastFlowrateUpdate':contract.functions.lastFlowrateUpdate(address).call(),
+#             'transmuter':contract.functions.transmuter(address).call()
+#         }
+#     return underlyingToken
+
 def getUnderlyingToken(bufferAddress, underlyingTokenAddress, web3):
     underlyingToken = {}
     for address in underlyingTokenAddress:
         contract = web3.eth.contract(address=bufferAddress, abi=transmuterbuffer_abi)
+        contrac1 = web3.eth.contract(address=address, abi=common_abi)
         underlyingToken[address] = {
+            'name':contrac1.functions.name().call(),
             'underlyingTokenAddress':address,
             'AMOs':contract.functions.amos(address).call(),
             'divertToAMO':contract.functions.divertToAmo(address).call(),
