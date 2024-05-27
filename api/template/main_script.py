@@ -4,13 +4,15 @@ from .functions.whitelist_script import fetch_whitelist
 from .functions.transmuter_script import fetch_transmuter
 from .functions.amo_script import fetch_AMO
 from .functions.alchemist_script import fetch_alchemist
+from .functions.keeper_script import fetch_keeper
 
 data = {
         'yieldTokens':fetch_yieldToken(),
         'alchemist':fetch_alchemist(),
         'whitelist':fetch_whitelist(),
         'amo':fetch_AMO(),
-        'transmuter':fetch_transmuter()
+        'transmuter':fetch_transmuter(),
+        'keeper':fetch_keeper()
     }
 # Function to convert large numbers and booleans to readable format
 def convert_data(data):
