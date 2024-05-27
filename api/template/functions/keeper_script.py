@@ -1,7 +1,7 @@
 import json
 from web3 import Web3
-from abi.abi_alchemistv2 import alchemistv2_abi
-from abi.abi_keeper import keeper_abi
+from .abi.abi_alchemistv2 import alchemistv2_abi
+from .abi.abi_keeper import keeper_abi
 
 # Fill in your infura API key here
 mainnet_API_key = "https://mainnet.infura.io/v3/245a04220b7442de94d1a26862bbbfa6"
