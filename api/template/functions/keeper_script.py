@@ -47,7 +47,7 @@ def getKeeper(alchemist, keeper, web3):
                 'chain':chainName,
                 'active':keeperParas[0],
                 'alchemist':address,
-                'yeidToken':i,
+                'yieldToken':i,
                 'lastHarvest':keeperParas[3],
                 'minimumHarvestAmount':keeperParas[4],
                 'minimumDelay':keeperParas[5],
