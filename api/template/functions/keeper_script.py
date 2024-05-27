@@ -2,6 +2,7 @@ import json
 from web3 import Web3
 from .abi.abi_alchemistv2 import alchemistv2_abi
 from .abi.abi_keeper import keeper_abi
+from .abi.abi_common import common_abi
 
 # Fill in your infura API key here
 mainnet_API_key = "https://mainnet.infura.io/v3/245a04220b7442de94d1a26862bbbfa6"
@@ -39,17 +40,25 @@ def getKeeper(alchemist, keeper, web3):
         for i in yieldTokenAddress:
             contractToGetKeeper = web3.eth.contract(address = keeper, abi = keeper_abi)
             keeperParas = contractToGetKeeper.functions.harvestJobs(i).call()
+            yieldTokenName = getYieldTokenName(i, web3)
             keepers[i] = {
+                'yieldTokenName':yieldTokenName,
+                'harvester':keeper,
                 'chain':chainName,
                 'active':keeperParas[0],
-                'alchemist':keeperParas[1],
-                'yeidToken':keeperParas[2],
+                'alchemist':address,
+                'yeidToken':i,
                 'lastHarvest':keeperParas[3],
                 'minimumHarvestAmount':keeperParas[4],
                 'minimumDelay':keeperParas[5],
                 'slippageBps':keeperParas[6]
             }
     return keepers
+
+def getYieldTokenName(yieldTokenAddress, web3):
+    contract = web3.eth.contract(address=yieldTokenAddress, abi=common_abi)
+    yieldTokenName = contract.functions.name().call()
+    return yieldTokenName
 
 def fetch_keeper():
     keepers = {
