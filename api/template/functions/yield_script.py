@@ -59,9 +59,9 @@ def getYieldToken(alchemist, web3):
                 'expectedValue': yieldTokenParas[9],
                 'pendingCredit': yieldTokenParas[10],
                 'distributedCredit': yieldTokenParas[11],
-                'lastDistributionBlock': yieldTokenParas[12],
+                'lastDistributionBlock': str(yieldTokenParas[12]),
                 'accruedWeight': yieldTokenParas[13],
-                'enabled': yieldTokenParas[14]
+                'enabled': str(yieldTokenParas[14])
             }
     return yieldToken
 
@@ -77,4 +77,7 @@ def fetch_yieldToken():
         'arbitrum':getYieldToken(arbitrum, web3_arbitrum),
         'optimism':getYieldToken(optimism, web3_optimism)
     }
+    # with open('1yield.json', 'w') as json_file:
+    #     json.dump(yieldTokens, json_file)
+    # print(yieldTokens)
     return yieldTokens

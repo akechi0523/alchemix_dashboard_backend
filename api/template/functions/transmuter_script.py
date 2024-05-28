@@ -136,7 +136,7 @@ def getUnderlyingToken(bufferAddress, underlyingTokenAddress, web3):
             'flowAvailable':contract.functions.flowAvailable(address).call(),
             'flowRate':contract.functions.flowRate(address).call(),
             'getAvailableFlow':contract.functions.getAvailableFlow(address).call(),
-            'lastFlowrateUpdate':contract.functions.lastFlowrateUpdate(address).call(),
+            'lastFlowrateUpdate':str(contract.functions.lastFlowrateUpdate(address).call()),
             'transmuter':contract.functions.transmuter(address).call()
         }
     return underlyingToken
