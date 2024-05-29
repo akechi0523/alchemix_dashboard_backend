@@ -33,10 +33,17 @@ Metis = {
 #Function to get bridges data
 def getBridges(crosschain, bridge, web3):
     bridges = {}
+    if crosschain == Arbitrum:
+        chainName = "Arbitrum"
+    if crosschain  == Metis:
+        chainName = "Metis"
+    if crosschain == Optimism:
+        chainName = "Optimism"
     for key in crosschain:
         contract = web3.eth.contract(address=crosschain[key], abi=bridge_abi)
         bridges[crosschain[key]] = {
             'token':key,
+            'chain':chainName,
             'address':crosschain[key],
             'bridge':bridge,
             'burningCurrentLimitOf':contract.functions.burningCurrentLimitOf(bridge).call(),
@@ -57,5 +64,3 @@ def fetch_bridge():
     bridge.update(getBridges(Metis, metis_bridge, web3_metis))
     print (bridge)
     return bridge
-
-fetch_bridge()

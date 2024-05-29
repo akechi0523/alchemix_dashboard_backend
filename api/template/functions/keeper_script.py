@@ -66,9 +66,6 @@ def fetch_keeper():
         'arbitrum':getKeeper(arbitrum, arbitrum_keeper, web3_arbitrum),
         'optimism':getKeeper(optimism, optimism_keeper, web3_optimism)
     }
-    with open('keepers.json', 'w') as json_file:
-        json.dump(keepers, json_file)
-    print(keepers)
     return keepers
 
 fetch_keeper()
