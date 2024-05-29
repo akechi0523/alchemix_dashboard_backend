@@ -18,21 +18,22 @@ metis_bridge = "0x6B142227A277CE62808E0Df93202483547Ec0188"
 
 #Cross-chain Address
 Arbitrum = {
-    "alUSD":"0xCB8FA9a76b8e203D8C3797bF438d8FB81Ea3326A",
-    "alETH":"0x17573150d67d820542EFb24210371545a4868B03"
+    "Arbitrum_alUSD":"0xCB8FA9a76b8e203D8C3797bF438d8FB81Ea3326A",
+    "Arbitrum_alETH":"0x17573150d67d820542EFb24210371545a4868B03"
 }
 Optimism = {
-    "alUSD":"0xCB8FA9a76b8e203D8C3797bF438d8FB81Ea3326A",
-    "alETH":"0x3E29D3A9316dAB217754d13b28646B76607c5f04"
+    "Optimism_alUSD":"0xCB8FA9a76b8e203D8C3797bF438d8FB81Ea3326A",
+    "Optimism_alETH":"0x3E29D3A9316dAB217754d13b28646B76607c5f04"
 }
 Metis = {
-    "alUSD":"0x303241e2B3b4aeD0bb0F8623e7442368FED8Faf3",
-    "alETH":"0x0E17934B9735D479B2388347fAeF0F4e58b9cc06"
+    "Metis_alUSD":"0x303241e2B3b4aeD0bb0F8623e7442368FED8Faf3",
+    "Metis_alETH":"0x0E17934B9735D479B2388347fAeF0F4e58b9cc06"
 }
 
 #Function to get bridges data
 def getBridges(crosschain, bridge, web3):
     bridges = {}
+    i = 0
     if crosschain == Arbitrum:
         chainName = "Arbitrum"
     if crosschain  == Metis:
@@ -40,9 +41,13 @@ def getBridges(crosschain, bridge, web3):
     if crosschain == Optimism:
         chainName = "Optimism"
     for key in crosschain:
+        if i == 0 :
+            name = 'alUSD'
+        else : 
+            name = 'alETH'
         contract = web3.eth.contract(address=crosschain[key], abi=bridge_abi)
-        bridges[crosschain[key]] = {
-            'token':key,
+        bridges[key] = {
+            'token':name,
             'chain':chainName,
             'address':crosschain[key],
             'bridge':bridge,
@@ -51,6 +56,7 @@ def getBridges(crosschain, bridge, web3):
             'mintingCurrentLimitOf':contract.functions.mintingCurrentLimitOf(bridge).call(),
             'mintingMaxLimitOf':contract.functions.mintingMaxLimitOf(bridge).call()
         }
+        i = i + 1
     return bridges
 
 # print(getBridges(Arbitrum, arbitrum_bridge, web3_arbitrum))
@@ -59,8 +65,11 @@ def getBridges(crosschain, bridge, web3):
 
 def fetch_bridge():
     bridge = {}
-    bridge.update(getBridges(Arbitrum, arbitrum_bridge, web3_arbitrum))
-    bridge.update(getBridges(Optimism, optimism_bridge, web3_optimism))
-    bridge.update(getBridges(Metis, metis_bridge, web3_metis))
+    arb = getBridges(Arbitrum, arbitrum_bridge, web3_arbitrum)
+    opt = getBridges(Optimism, optimism_bridge, web3_optimism)
+    met = getBridges(Metis, metis_bridge, web3_metis)
+    for d in [arb, opt, met]:
+        bridge.update(d)
     print (bridge)
     return bridge
+
