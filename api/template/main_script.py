@@ -5,6 +5,7 @@ from .functions.transmuter_script import fetch_transmuter
 from .functions.amo_script import fetch_AMO
 from .functions.alchemist_script import fetch_alchemist
 from .functions.keeper_script import fetch_keeper
+from .functions.bridge_script import fetch_bridge
 
 data = {
         'yieldTokens':fetch_yieldToken(),
@@ -12,7 +13,8 @@ data = {
         'whitelist':fetch_whitelist(),
         'amo':fetch_AMO(),
         'transmuter':fetch_transmuter(),
-        'keeper':fetch_keeper()
+        'keeper':fetch_keeper(),
+        'bridge':fetch_bridge()
     }
 # Function to convert large numbers and booleans to readable format
 def convert_data(data):
