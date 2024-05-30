@@ -44,6 +44,7 @@ def getYieldToken(alchemist, web3):
         for i in yieldTokenAddress:
             yieldTokenParas = contract.functions.getYieldTokenParameters(i).call()
             yieldTokenName = getYieldTokenName(i, web3)
+            underlyingTokenPara = contract.functions.getUnderlyingTokenParameters(yieldTokenParas[1]).call()
             yieldToken[i] = {
                 'chain':chainName,
                 'Name':yieldTokenName,
@@ -61,7 +62,8 @@ def getYieldToken(alchemist, web3):
                 'distributedCredit': yieldTokenParas[11],
                 'lastDistributionBlock': str(yieldTokenParas[12]),
                 'accruedWeight': yieldTokenParas[13],
-                'enabled': str(yieldTokenParas[14])
+                'enabled': str(yieldTokenParas[14]),
+                'underlyingTokenDecimal': underlyingTokenPara[0]
             }
     return yieldToken
 
@@ -79,5 +81,7 @@ def fetch_yieldToken():
     }
     # with open('1yield.json', 'w') as json_file:
     #     json.dump(yieldTokens, json_file)
-    # print(yieldTokens)
+    print(yieldTokens)
     return yieldTokens
+
+fetch_yieldToken()

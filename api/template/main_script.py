@@ -41,9 +41,9 @@ def convert_booleans_to_strings(data):
         for i in range(len(data)):
             if isinstance(data[i], bool):
                 data[i] = str(data[i])
-            elif isinstance(data[i], list):
+            elif isinstance(data[i], list) or isinstance(data, int):
                 data[i] = convert_booleans_to_strings(data[i])
-    elif isinstance(data, bool):
+    elif isinstance(data, bool) or isinstance(data, int):
         data = str(data)
     return data
 
