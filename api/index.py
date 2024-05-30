@@ -1,14 +1,14 @@
 import json
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
-# from template.main_script import fetch_data
+from template.main_script import fetch_data
 from flask_cors import CORS
 from flask_cors import cross_origin
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://alchemix-dashboard-frontend.vercel.app/"}})
 
-# fetch_data()
+fetch_data()
 
 # Function to convert boolean values to strings
 def convert_booleans_to_strings(data):

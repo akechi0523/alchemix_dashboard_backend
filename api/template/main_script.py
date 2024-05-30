@@ -17,20 +17,20 @@ data = {
         'bridge':fetch_bridge()
     }
 # Function to convert large numbers and booleans to readable format
-def convert_data(data):
-    if isinstance(data, dict):
-        for key, value in data.items():
-            data[key] = convert_data(value)
-    elif isinstance(data, list):
-        for i in range(len(data)):
-            data[i] = convert_data(data[i])
-    elif isinstance(data, int) or isinstance(data, float):
-        if abs(data) >= 1e6:
-            data = f'{data:.3e}'
-    return data
+# def convert_data(data):
+#     if isinstance(data, dict):
+#         for key, value in data.items():
+#             data[key] = convert_data(value)
+#     elif isinstance(data, list):
+#         for i in range(len(data)):
+#             data[i] = convert_data(data[i])
+#     elif isinstance(data, int) or isinstance(data, float):
+#         if abs(data) >= 1e6:
+#             data = f'{data:.3e}'
+#     return data
 
-# Convert data in the JSON
-converted_data = convert_data(data)
+# # Convert data in the JSON
+# converted_data = convert_data(data)
 
 # Function to convert boolean values to strings
 def convert_booleans_to_strings(data):
@@ -49,7 +49,7 @@ def convert_booleans_to_strings(data):
 
 
 # Convert boolean values in the JSON data to strings
-final_data = convert_booleans_to_strings(converted_data)
+final_data = convert_booleans_to_strings(data)
 
 def fetch_data():
     with open('data.json', 'w') as json_file:
