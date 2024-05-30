@@ -70,6 +70,5 @@ def fetch_bridge():
     met = getBridges(Metis, metis_bridge, web3_metis)
     for d in [arb, opt, met]:
         bridge.update(d)
-    print (bridge)
     return bridge
 
