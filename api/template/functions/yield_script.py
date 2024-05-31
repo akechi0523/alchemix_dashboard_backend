@@ -81,7 +81,4 @@ def fetch_yieldToken():
     }
     # with open('1yield.json', 'w') as json_file:
     #     json.dump(yieldTokens, json_file)
-    print(yieldTokens)
     return yieldTokens
-
-fetch_yieldToken()

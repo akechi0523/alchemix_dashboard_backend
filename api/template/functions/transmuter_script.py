@@ -127,9 +127,10 @@ def getUnderlyingToken(bufferAddress, underlyingTokenAddress, web3):
     underlyingToken = {}
     for address in underlyingTokenAddress:
         contract = web3.eth.contract(address=bufferAddress, abi=transmuterbuffer_abi)
-        contrac1 = web3.eth.contract(address=address, abi=common_abi)
+        contract1 = web3.eth.contract(address=address, abi=common_abi)
         underlyingToken[address] = {
-            'name':contrac1.functions.name().call(),
+            'name':contract1.functions.name().call(),
+            'decimal':contract1.functions.decimals().call(),
             'underlyingTokenAddress':address,
             'AMOs':contract.functions.amos(address).call(),
             'divertToAMO':contract.functions.divertToAmo(address).call(),
@@ -148,4 +149,3 @@ def fetch_transmuter():
         'optimism':getTransmuter(optimism, web3_optimism)
     }
     return transmuter
-
