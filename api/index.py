@@ -19,18 +19,29 @@ def convert_booleans_to_strings(data):
         for i in range(len(data)):
             if isinstance(data[i], bool):
                 data[i] = str(data[i])
-            elif isinstance(data[i], list) or isinstance(data, int):
+            elif isinstance(data[i], list):
                 data[i] = convert_booleans_to_strings(data[i])
-    elif isinstance(data, bool) or isinstance(data, int):
+    elif isinstance(data, bool):
         data = str(data)
     return data
+
+def convert_numbers_to_strings(obj):
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            obj[key] = convert_numbers_to_strings(value)
+    elif isinstance(obj, list):
+        for i in range(len(obj)):
+            obj[i] = convert_numbers_to_strings(obj[i])
+    elif isinstance(obj, (int, float)):
+        return str(obj)
+    return obj
 
 @app.route('/api/data')
 @cross_origin()
 def get_json_data():
     with open("data.json", 'r') as f:
         data = json.load(f)
-    converted_data = convert_booleans_to_strings(data)
+    converted_data = convert_numbers_to_strings(convert_booleans_to_strings(data))
     data1 = json.dumps(converted_data, sort_keys=False)
     return data1
 
